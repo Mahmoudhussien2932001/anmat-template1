@@ -1,0 +1,11 @@
+import fs from 'fs'
+const html = fs.readFileSync('references/FranchiseME-3D.html', 'utf8')
+const start = html.indexOf('const AS=')
+let slice = html.slice(start, start + 200000)
+slice = slice.replace(/data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=\s]+/g, '"IMG"')
+const end = slice.indexOf('const opportunities=')
+const clients = slice.slice(0, end > 0 ? end : 5000)
+const names = [...clients.matchAll(/\['([^']+)'/g)].map((m) => m[1])
+console.log(names.join('\n'))
+console.log('---ops head---')
+console.log(slice.slice(end, end + 2500))
